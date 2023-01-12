@@ -22,7 +22,7 @@ async function run (){
         // console.log(productCollection)
         app.get('/products', async(req, res)=>{
             const query = {};
-            const cursor = productCollection.find(query).limit(3);
+            const cursor = productCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
         });
@@ -43,12 +43,7 @@ async function run (){
         });
         // user API
 
-        app.get('/users', async(req, res)=>{
-            const query ={}
-            const cursor = userCollection.find(query);
-            const users = await cursor.toArray();
-            res.send(users)
-        })
+        app.get('/users')
         app.post('/user', async(req, res)=>{
             const user = req.body;
             const result = await userCollection.insertOne(user);

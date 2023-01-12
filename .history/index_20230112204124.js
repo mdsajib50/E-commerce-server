@@ -22,7 +22,7 @@ async function run (){
         // console.log(productCollection)
         app.get('/products', async(req, res)=>{
             const query = {};
-            const cursor = productCollection.find(query).limit(3);
+            const cursor = productCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
         });
@@ -47,7 +47,7 @@ async function run (){
             const query ={}
             const cursor = userCollection.find(query);
             const users = await cursor.toArray();
-            res.send(users)
+            res.s
         })
         app.post('/user', async(req, res)=>{
             const user = req.body;

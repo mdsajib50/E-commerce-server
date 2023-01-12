@@ -22,7 +22,7 @@ async function run (){
         // console.log(productCollection)
         app.get('/products', async(req, res)=>{
             const query = {};
-            const cursor = productCollection.find(query).limit(3);
+            const cursor = productCollection.find(query).lem;
             const products = await cursor.toArray();
             res.send(products);
         });
