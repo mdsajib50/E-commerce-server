@@ -41,14 +41,7 @@ async function run (){
             const result = productCollection.insertOne(product)
             res.send(result)
         });
-        // user API
-
-        app.post('/user', async(req, res)=>{
-            const user = req.body;
-            const result = await userCollection.insertOne(user);
-            res.send(result)
-
-        })
+        
     }
     finally{
 
