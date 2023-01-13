@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5001;
@@ -27,8 +26,7 @@ async function run (){
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn:'7d'})
             res.send({token})
             
-          });
-
+          })
         app.get('/products', async(req, res)=>{
             const query = {};
             const cursor = productCollection.find(query).limit(3);
