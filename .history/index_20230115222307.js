@@ -68,11 +68,7 @@ async function run (){
         });
 
         app.get('/myproduct',verifyJwt, async(req, res)=>{
-            const decoded = req.decoded
-              
-              if (decoded.email !== req.query.email) {
-               return res.status(403).send({message: 'unauthorized access!!!'})
-              }
+            
           let query ={};
           if (req.query.email) {
             query = {
@@ -129,12 +125,7 @@ async function run (){
             res.send(result)
         });
         // booking api
-        app.get('/booking',verifyJwt, async(req,res)=>{
-            const decoded = req.decoded
-              
-              if (decoded.email !== req.query.email) {
-               return res.status(403).send({message: 'unauthorized access!'})
-              }
+        app.get('/booking', async(req,res)=>{
             let query ={};
             if (req.query.email) {
               query = {

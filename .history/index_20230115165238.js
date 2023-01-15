@@ -13,23 +13,7 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.bx3l1s2.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-function verifyJwt(req, res, next) {
-    const authHeader = req.headers.authorization;
-   
-    if (!authHeader) {
-      return res.status(401).send({message: 'unauthorized access!'})
-    }
-  
-  const token = authHeader.split(' ')[1]
-  
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded) {
-    if (err) {
-      return res.status(401).send({message: 'unauthorized access!!'})
-    }
-    req.decoded = decoded
-    next()
-  })
-  }
+
 
 
 async function run (){
@@ -48,7 +32,7 @@ async function run (){
 
         app.get('/products', async(req, res)=>{
             const query = {};
-            const cursor = productCollection.find(query);
+            const cursor = productCollection.find(query).limit(3);
             const products = await cursor.toArray();
             res.send(products);
         });
@@ -67,12 +51,7 @@ async function run (){
             res.send(products)
         });
 
-        app.get('/myproduct',verifyJwt, async(req, res)=>{
-            const decoded = req.decoded
-              
-              if (decoded.email !== req.query.email) {
-               return res.status(403).send({message: 'unauthorized access!!!'})
-              }
+        app.get('/myproduct', async(req, res)=>{
           let query ={};
           if (req.query.email) {
             query = {
@@ -90,18 +69,15 @@ async function run (){
             const result = productCollection.insertOne(product)
             res.send(result)
         });
-        app.patch('/product/:id', async(req, res)=>{
+        app.patch('/p/:id', async(req, res)=>{
             const id = req.params.id;
-            const advertise = req.body.advertise
+            const status = req.body.status
             const query = { _id: ObjectId(id)};
             const updateDoc = {
               $set: {
-                advertise: advertise
+                status: status
               }
             }
-            const result = await productCollection.updateOne(query, updateDoc);
-            res.send(result)
-          })
         app.delete('/product/:id', async(req, res)=>{
             const id = req.params.id;
             const query ={_id: ObjectId(id)}
@@ -129,28 +105,11 @@ async function run (){
             res.send(result)
         });
         // booking api
-        app.get('/booking',verifyJwt, async(req,res)=>{
-            const decoded = req.decoded
-              
-              if (decoded.email !== req.query.email) {
-               return res.status(403).send({message: 'unauthorized access!'})
-              }
-            let query ={};
-            if (req.query.email) {
-              query = {
-                email: req.query.email
-              }
-            }
-            const cursor = bookingCollection.find(query);
-            const bookings = await cursor.toArray();
-            res.send(bookings)
-        })
         app.post('/booking', async(req, res)=>{
             const booking = req.body;
             const  result = await bookingCollection.insertOne(booking);
             res.send(result)
-        });
-        
+        })
     }
     finally{
 

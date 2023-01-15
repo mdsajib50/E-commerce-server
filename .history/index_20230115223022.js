@@ -129,7 +129,7 @@ async function run (){
             res.send(result)
         });
         // booking api
-        app.get('/booking',verifyJwt, async(req,res)=>{
+        app.get('/booking',ver async(req,res)=>{
             const decoded = req.decoded
               
               if (decoded.email !== req.query.email) {
