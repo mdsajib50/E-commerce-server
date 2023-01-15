@@ -45,9 +45,8 @@ async function run (){
 
         app.get('/product-category/:category', async(req, res)=>{
             const category =req.params.category;
-            console.log('category:',category)
-            const query ={category:category}
-            const products =await productCollection.find(query);
+            const query ={category:[...category]}
+            const products =await productCollection.findOne(query);
             res.send(products)
         });
 
@@ -59,22 +58,16 @@ async function run (){
             }
           }
           
-          const cursor = productCollection.find(query);
-          const products = await cursor.toArray()
+          const cursor = pro.find(query);
+          const review = await cursor.toArray()
           
-          res.send(products)
+          res.send(review)
       })
         app.post('/product', async(req, res)=>{
             const product = req.body;
             const result = productCollection.insertOne(product)
             res.send(result)
         });
-        app.delete('/product/:id', async(req, res)=>{
-            const id = req.params.id;
-            const query ={_id: ObjectId(id)}
-            const result = await productCollection.deleteOne(query);
-            res.send(result)
-        })
         // user API
 
         app.get('/users', async(req, res)=>{

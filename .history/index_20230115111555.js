@@ -45,8 +45,7 @@ async function run (){
 
         app.get('/product-category/:category', async(req, res)=>{
             const category =req.params.category;
-            console.log('category:',category)
-            const query ={category:category}
+            const query ={category:[...category}
             const products =await productCollection.find(query);
             res.send(products)
         });
@@ -69,12 +68,6 @@ async function run (){
             const result = productCollection.insertOne(product)
             res.send(result)
         });
-        app.delete('/product/:id', async(req, res)=>{
-            const id = req.params.id;
-            const query ={_id: ObjectId(id)}
-            const result = await productCollection.deleteOne(query);
-            res.send(result)
-        })
         // user API
 
         app.get('/users', async(req, res)=>{
